@@ -1,0 +1,761 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<meta name="theme-color" content="#F5F7F8"/>
+<meta name="description" content="제4회 창의융합 보드게임 대축제 · 부산도서관 1층 부스 안내 지도"/>
+<title>제4회 창의융합 보드게임 대축제 · 부스 안내</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎲</text></svg>"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&display=swap"/>
+<style>
+:root{
+  --bg:#F5F7F8; --card:#FFFFFF; --text:#273444; --muted:#6B7280; --line:#E5EAF0;
+  --board:#5CC9A7; --board-dark:#2F9E7E; --board-soft:#E8F8F2;
+  --creative:#8E82F8; --creative-dark:#6156D8; --creative-soft:#F1EEFF;
+  --floor:#F6F2EB; --room-wall:#C9C2B6;
+  --radius:20px;
+  --sans:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,"Noto Sans KR",system-ui,sans-serif;
+  --display:"Jua",var(--sans);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);
+  background-image:
+    radial-gradient(680px 340px at 12% -60px, rgba(92,201,167,.10), transparent 70%),
+    radial-gradient(680px 340px at 95% -40px, rgba(142,130,248,.10), transparent 70%);
+  background-repeat:no-repeat;
+}
+.app{max-width:760px;margin:0 auto;padding:20px 16px calc(40px + env(safe-area-inset-bottom))}
+
+/* ---------- header ---------- */
+header{margin-bottom:14px}
+.eyebrow{display:flex;align-items:center;gap:7px;font-size:12.5px;font-weight:800;color:#5A6678;letter-spacing:.04em}
+.eyebrow .dot{width:8px;height:8px;border-radius:50%}
+.eyebrow .dot.mint{background:var(--board)}
+.eyebrow .dot.lav{background:var(--creative)}
+h1{font-family:var(--display);font-weight:400;font-size:clamp(24px,6.4vw,30px);line-height:1.25;margin:6px 0 4px;letter-spacing:-.01em}
+h1 .accent-b{color:var(--board-dark)}
+h1 .accent-c{color:var(--creative-dark)}
+.sub{font-size:14px;color:var(--muted);margin:0}
+.sub strong{color:var(--text);font-weight:700}
+
+/* ---------- filter tabs ---------- */
+.tabs{display:grid;grid-template-columns:1fr 1.35fr 1.35fr;gap:7px;margin:14px 0 12px}
+.tab{
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  border:1.5px solid var(--line);background:var(--card);color:#66727f;
+  border-radius:13px;padding:11px 6px;font-family:inherit;font-weight:750;font-size:13.5px;
+  cursor:pointer;transition:background .18s,border-color .18s,color .18s,transform .12s;
+  -webkit-tap-highlight-color:transparent;
+}
+.tab:active{transform:scale(.97)}
+.tab .cnt{font-size:11px;font-weight:800;padding:1.5px 7px;border-radius:99px;background:#EFF2F5;color:#8A94A2}
+.tab[aria-pressed="true"]{border-color:#9AA6B5;color:var(--text)}
+.tab[data-filter="boardgame"][aria-pressed="true"]{border-color:var(--board);background:var(--board-soft);color:var(--board-dark)}
+.tab[data-filter="boardgame"][aria-pressed="true"] .cnt{background:#fff;color:var(--board-dark)}
+.tab[data-filter="creative"][aria-pressed="true"]{border-color:var(--creative);background:var(--creative-soft);color:var(--creative-dark)}
+.tab[data-filter="creative"][aria-pressed="true"] .cnt{background:#fff;color:var(--creative-dark)}
+.tab:focus-visible{outline:3px solid rgba(97,86,216,.45);outline-offset:2px}
+
+/* ---------- map card ---------- */
+.map-card{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  padding:10px;box-shadow:0 10px 30px rgba(39,52,68,.07);
+}
+.map-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin:4px 6px 8px}
+.map-title{font-weight:850;font-size:15.5px}
+.map-help{font-size:11.5px;color:var(--muted)}
+.map-frame{
+  position:relative;border-radius:14px;overflow:hidden;background:var(--floor);
+  border:1px solid #EAE4D9;
+}
+#mapSvg{display:block;width:100%;height:auto;touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:grab}
+#mapSvg.dragging{cursor:grabbing}
+#mapSvg text{pointer-events:none}
+
+/* zoom controls */
+.zoom-ui{position:absolute;right:8px;bottom:8px;display:flex;flex-direction:column;gap:6px}
+.zbtn{
+  width:36px;height:36px;border-radius:11px;border:1px solid var(--line);background:rgba(255,255,255,.94);
+  color:#4A5568;font-size:18px;font-weight:800;cursor:pointer;line-height:1;
+  box-shadow:0 3px 10px rgba(39,52,68,.12);display:flex;align-items:center;justify-content:center;
+  -webkit-tap-highlight-color:transparent;
+}
+.zbtn:active{transform:scale(.94)}
+.zbtn:focus-visible{outline:3px solid rgba(97,86,216,.45)}
+.zbtn svg{display:block}
+
+/* first-touch hint */
+.hint{
+  position:absolute;left:50%;top:12px;transform:translateX(-50%);
+  background:rgba(39,52,68,.85);color:#fff;font-size:12.5px;font-weight:700;
+  padding:8px 14px;border-radius:99px;pointer-events:none;white-space:nowrap;
+  animation:hintFloat 2.4s ease-in-out infinite;transition:opacity .45s;
+}
+.hint.gone{opacity:0}
+@keyframes hintFloat{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(4px)}}
+
+/* legend */
+.legend{display:flex;flex-wrap:wrap;gap:8px 14px;margin:11px 6px 2px;font-size:12px;color:#5D6875;font-weight:600}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:13px;height:13px;border-radius:4px;flex:none}
+.legend .lg-b i{background:var(--board);border:1.5px solid var(--board-dark)}
+.legend .lg-c i{background:var(--creative);border:1.5px solid var(--creative-dark)}
+.legend .lg-hq i{background:#F0E7D6;border:1.5px solid #CBB893}
+.legend .lg-photo i{background:#fff;border:2px solid #3FA96F;border-radius:3px}
+.legend .lg-gate i{background:#8A5CF6;border-radius:3px;clip-path:polygon(50% 0,100% 55%,72% 55%,72% 100%,28% 100%,28% 55%,0 55%)}
+
+/* ---------- SVG map internals ---------- */
+.room-label{font-size:19px;font-weight:800;fill:#8C8474;letter-spacing:.02em}
+.room-label.small{font-size:15px}
+.plaza-label{font-family:var(--display);font-size:25px;fill:#B4A995;letter-spacing:.06em}
+.facility-label{font-size:13px;font-weight:700;fill:#3FA96F}
+.gate-label{font-size:15px;font-weight:800;fill:#fff}
+.hq-label{font-size:15.5px;font-weight:800;fill:#7A6740}
+.way-label{font-size:12px;font-weight:800;fill:#E07B2F}
+
+.booth{cursor:pointer;transition:opacity .2s ease}
+.booth .chip-main{transition:all .18s ease}
+.booth .pill-num{font-family:var(--display);fill:var(--text)}
+.booth.boardgame .chip-main{fill:var(--board);stroke:var(--board-dark)}
+.booth.boardgame .chip-base{fill:var(--board-dark)}
+.booth.boardgame .pill-num{fill:var(--board-dark)}
+.booth.creative .chip-main{fill:var(--creative);stroke:var(--creative-dark)}
+.booth.creative .chip-base{fill:var(--creative-dark)}
+.booth.creative .pill-num{fill:var(--creative-dark)}
+.booth .pill{fill:#fff;filter:drop-shadow(0 1px 1.5px rgba(0,0,0,.18))}
+.booth .hit{fill:transparent;stroke:none}
+.booth.dim{opacity:.15;pointer-events:none}
+.booth.faded{opacity:.4}
+.booth.selected{opacity:1}
+.booth.selected .chip-wrap{transform:scale(1.1);transform-box:fill-box;transform-origin:center}
+.booth.selected .chip-main{stroke-width:3;filter:drop-shadow(0 5px 9px rgba(39,52,68,.35))}
+.booth:focus{outline:none}
+.booth:focus-visible .chip-main{stroke:#273444;stroke-width:3.5}
+.chip-wrap{transition:transform .18s ease}
+
+/* ---------- booth quick list ---------- */
+.list-sec{margin-top:20px}
+.list-head{display:flex;align-items:baseline;justify-content:space-between;margin:0 4px 10px}
+.list-title{font-weight:850;font-size:15.5px}
+.list-sub{font-size:11.5px;color:var(--muted)}
+.chip-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media(min-width:560px){.chip-grid{grid-template-columns:1fr 1fr 1fr}}
+.bchip{
+  display:flex;align-items:center;gap:9px;text-align:left;
+  border:1.5px solid var(--line);background:var(--card);border-radius:14px;
+  padding:10px 11px;cursor:pointer;font-family:inherit;
+  transition:border-color .15s,transform .12s,opacity .2s,box-shadow .15s;
+  -webkit-tap-highlight-color:transparent;
+}
+.bchip:active{transform:scale(.97)}
+.bchip:focus-visible{outline:3px solid rgba(97,86,216,.45);outline-offset:2px}
+.bchip .no{
+  font-family:var(--display);flex:none;width:32px;height:32px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;font-size:15px;color:#fff;
+}
+.bchip.boardgame .no{background:var(--board-dark)}
+.bchip.creative .no{background:var(--creative-dark)}
+.bchip .nm{font-size:13px;font-weight:750;color:var(--text);line-height:1.3}
+.bchip .tg{display:block;font-size:11px;font-weight:600;color:var(--muted);margin-top:1px}
+.bchip.boardgame{border-color:#D9F0E7}
+.bchip.creative{border-color:#E4E0FB}
+.bchip.dim{opacity:.32}
+.bchip.selected{box-shadow:0 0 0 2.5px var(--creative-dark)}
+.bchip.selected.boardgame{box-shadow:0 0 0 2.5px var(--board-dark)}
+
+/* ---------- footer note ---------- */
+.note{margin-top:22px;font-size:12px;color:#8B94A1;line-height:1.6;text-align:center}
+
+/* ---------- bottom sheet ---------- */
+.backdrop{
+  position:fixed;inset:0;background:rgba(30,38,50,.42);opacity:0;pointer-events:none;
+  transition:opacity .22s ease;z-index:40;
+}
+.backdrop.show{opacity:1;pointer-events:auto}
+.sheet{
+  position:fixed;left:0;right:0;bottom:0;z-index:50;
+  background:var(--card);border-radius:22px 22px 0 0;
+  box-shadow:0 -12px 40px rgba(23,32,45,.22);
+  padding:8px 20px calc(24px + env(safe-area-inset-bottom));
+  transform:translateY(105%);transition:transform .24s cubic-bezier(.32,.72,.33,1);
+  max-width:560px;margin:0 auto;touch-action:none;
+}
+.sheet.show{transform:translateY(0)}
+.sheet.no-anim{transition:none}
+.handle{width:42px;height:5px;border-radius:99px;background:#D7DDE4;margin:4px auto 12px}
+.sheet-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.badges{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:8px}
+.badge-no{
+  font-family:var(--display);font-size:13.5px;color:#fff;border-radius:9px;padding:4px 10px;letter-spacing:.03em;
+}
+.badge-no.boardgame{background:var(--board-dark)}
+.badge-no.creative{background:var(--creative-dark)}
+.badge-cat{font-size:12px;font-weight:800;border-radius:99px;padding:4.5px 11px}
+.badge-cat.boardgame{background:var(--board-soft);color:var(--board-dark)}
+.badge-cat.creative{background:var(--creative-soft);color:var(--creative-dark)}
+.sheet h2{font-size:19px;line-height:1.35;margin:0 0 4px;letter-spacing:-.02em}
+.close{
+  flex:none;width:34px;height:34px;border-radius:50%;border:none;background:#EFF2F5;color:#5A6678;
+  font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center;margin-top:2px;
+  -webkit-tap-highlight-color:transparent;
+}
+.close:focus-visible{outline:3px solid rgba(97,86,216,.45)}
+.desc{font-size:14px;color:#4A5563;line-height:1.65;margin:10px 0 2px}
+.desc.placeholder{
+  color:#98A1AD;background:#F7F9FA;border:1.5px dashed #DDE3EA;border-radius:12px;
+  padding:11px 14px;font-size:13px;
+}
+.meta{display:grid;grid-template-columns:auto 1fr;gap:8px 14px;margin:14px 0 0;font-size:13.5px}
+.meta dt{color:var(--muted);font-weight:700;display:flex;align-items:center;gap:5px}
+.meta dd{margin:0;font-weight:650}
+.meta .flag{color:#B8823A;font-weight:700}
+
+/* ---------- load-in animation ---------- */
+@media (prefers-reduced-motion: no-preference){
+  .rise{opacity:0;transform:translateY(10px);animation:rise .5s ease forwards}
+  .rise.d1{animation-delay:.06s}.rise.d2{animation-delay:.12s}.rise.d3{animation-delay:.2s}
+  @keyframes rise{to{opacity:1;transform:none}}
+}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{transition-duration:.01ms !important;animation:none !important}
+}
+</style>
+</head>
+<body>
+<main class="app">
+  <header class="rise">
+    <div class="eyebrow"><span class="dot mint"></span><span class="dot lav"></span>부산도서관 1F 행사장 안내</div>
+    <h1>제4회 <span class="accent-b">창의융합</span> <span class="accent-c">보드게임</span> 대축제</h1>
+    <p class="sub">궁금한 부스를 <strong>지도에서 눌러</strong> 체험 내용을 살펴보세요.</p>
+  </header>
+
+  <div class="tabs rise d1" role="group" aria-label="부스 카테고리 필터">
+    <button class="tab" data-filter="all" aria-pressed="true">전체</button>
+    <button class="tab" data-filter="boardgame" aria-pressed="false">보드게임 체험 <span class="cnt">7</span></button>
+    <button class="tab" data-filter="creative" aria-pressed="false">창의융합 체험 <span class="cnt">7</span></button>
+  </div>
+
+  <section class="map-card rise d2" aria-label="1층 부스 배치 지도">
+    <div class="map-head">
+      <div class="map-title">1층 부스 배치도</div>
+      <div class="map-help">두 손가락으로 확대할 수 있어요</div>
+    </div>
+    <div class="map-frame" id="mapFrame">
+      <svg id="mapSvg" viewBox="30 20 730 615" role="img" aria-label="부산도서관 1층 축제 배치 지도. 지혜의 광장을 중심으로 부스 1번부터 14번이 배치되어 있습니다.">
+        <!-- ======== floor / rooms (static) ======== -->
+        <g id="rooms">
+          <!-- 지혜의 광장 (open plaza floor) -->
+          <rect x="196" y="46" width="350" height="360" rx="26" fill="#FBF8F3"/>
+
+          <!-- 너나들이 광장 -->
+          <g>
+            <path d="M52 109 L170 105 L170 318 L115 340 L49 252 Z" fill="#EDECE8" stroke="#D8D5CE" stroke-width="2"/>
+            <text class="room-label small" x="115" y="200" text-anchor="middle">너나들이</text>
+            <text class="room-label small" x="115" y="220" text-anchor="middle">광장</text>
+          </g>
+
+          <!-- 꿈뜨락 어린이실 -->
+          <g>
+            <path d="M574 42 L744 42 L744 438 L664 438 L560 280 Z" fill="#FBEEDC" stroke="#E4CBA6" stroke-width="2.5"/>
+            <path d="M574 42 L744 42 L744 50 L574 50 Z" fill="#E4CBA6" opacity=".55"/>
+            <text class="room-label" x="668" y="200" text-anchor="middle">꿈뜨락</text>
+            <text class="room-label" x="668" y="222" text-anchor="middle">어린이실</text>
+          </g>
+
+          <!-- 중앙홀 · 안내데스크 -->
+          <g>
+            <rect x="205" y="401" width="292" height="158" rx="16" fill="#E2F1F0" stroke="#BCDBD8" stroke-width="2.5"/>
+            <rect x="205" y="545" width="292" height="14" rx="7" fill="#BCDBD8" opacity=".5"/>
+            <text class="room-label" x="351" y="490" text-anchor="middle" fill="#5E8A85">중앙홀 · 안내데스크</text>
+            <circle cx="351" cy="513" r="4" fill="#7FADA8"/>
+          </g>
+
+          <!-- 전동놀이 자유체험 공간 -->
+          <g>
+            <rect x="542" y="468" width="148" height="74" rx="13" fill="#FFF9EF" stroke="#E8A54C" stroke-width="2" stroke-dasharray="7 5"/>
+            <text class="room-label small" x="616" y="500" text-anchor="middle" fill="#C88B35">전동놀이</text>
+            <text class="room-label small" x="616" y="519" text-anchor="middle" fill="#C88B35">자유체험 공간</text>
+          </g>
+
+          <!-- 지혜의 광장 label -->
+          <text class="plaza-label" x="398" y="212" text-anchor="middle">지혜의 광장</text>
+        </g>
+
+        <!-- ======== facilities / wayfinding ======== -->
+        <g id="facilities">
+          <!-- 포토존 현수막 -->
+          <g>
+            <rect x="214" y="418" width="26" height="98" rx="7" fill="#fff" stroke="#3FA96F" stroke-width="2.5"/>
+            <text class="facility-label" transform="rotate(90 227 467)" x="227" y="471" text-anchor="middle">포토존 현수막</text>
+          </g>
+          <!-- 건물벽 현수막 및 빈백 -->
+          <g>
+            <rect x="506" y="110" width="28" height="84" rx="7" fill="#fff" stroke="#3FA96F" stroke-width="2.5"/>
+            <text class="facility-label" transform="rotate(90 520 152)" x="520" y="156" text-anchor="middle">현수막 · 빈백</text>
+          </g>
+          <!-- 본부 -->
+          <g>
+            <rect x="124" y="355" width="90" height="34" rx="9" fill="#F0E7D6" stroke="#CBB893" stroke-width="2"/>
+            <text class="hq-label" x="169" y="377" text-anchor="middle">본부</text>
+          </g>
+          <!-- 미래엔 (협력 부스 · 번호 미지정) -->
+          <g>
+            <rect x="368" y="355" width="62" height="34" rx="9" fill="#F0E7D6" stroke="#CBB893" stroke-width="2"/>
+            <text class="hq-label" x="399" y="377" text-anchor="middle">미래엔</text>
+          </g>
+
+          <!-- 출입 (좌측) -->
+          <g transform="translate(88 400) rotate(38)">
+            <path d="M0 -34 L26 0 L12 0 L12 30 L-12 30 L-12 0 L-26 0 Z" fill="#8A5CF6"/>
+            <text class="gate-label" x="0" y="18" text-anchor="middle" transform="rotate(-38 0 10)">출입</text>
+          </g>
+          <!-- 출입 (우측 하단) -->
+          <g transform="translate(560 590) rotate(-30)">
+            <path d="M0 -34 L26 0 L12 0 L12 30 L-12 30 L-12 0 L-26 0 Z" fill="#8A5CF6"/>
+            <text class="gate-label" x="0" y="18" text-anchor="middle" transform="rotate(30 0 10)">출입</text>
+          </g>
+
+          <!-- 대회장 내려가는 길 -->
+          <g transform="translate(468 428)">
+            <path d="M-26 0 L-6 -14 L-6 -6 L26 -6 L26 6 L-6 6 L-6 14 Z" fill="#F2994A" opacity=".9"/>
+            <text class="way-label" x="0" y="26" text-anchor="middle">대회장 내려가는 길</text>
+          </g>
+        </g>
+
+        <!-- ======== booths (generated from data) ======== -->
+        <g id="boothLayer"></g>
+      </svg>
+
+      <div class="hint" id="tapHint">👆 부스를 눌러 체험 내용을 확인하세요</div>
+
+      <div class="zoom-ui">
+        <button class="zbtn" id="zoomIn" aria-label="지도 확대">+</button>
+        <button class="zbtn" id="zoomOut" aria-label="지도 축소">−</button>
+        <button class="zbtn" id="zoomReset" aria-label="지도 전체 보기">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="legend">
+      <span class="lg-b"><i></i>보드게임 체험</span>
+      <span class="lg-c"><i></i>창의융합 체험</span>
+      <span class="lg-hq"><i></i>본부·협력</span>
+      <span class="lg-photo"><i></i>포토존·현수막</span>
+      <span class="lg-gate"><i></i>출입구</span>
+    </div>
+  </section>
+
+  <section class="list-sec rise d3" aria-label="부스 목록">
+    <div class="list-head">
+      <div class="list-title">부스 한눈에 보기</div>
+      <div class="list-sub">누르면 상세 정보가 열려요</div>
+    </div>
+    <div class="chip-grid" id="chipGrid"></div>
+  </section>
+
+  <p class="note">
+    부스 위치와 프로그램은 현장 사정에 따라 일부 변경될 수 있습니다.<br/>
+    체험 세부 내용은 확정되는 대로 업데이트됩니다.
+  </p>
+</main>
+
+<div class="backdrop" id="backdrop"></div>
+<aside class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle" aria-hidden="true">
+  <div class="handle" aria-hidden="true"></div>
+  <div class="sheet-top">
+    <div>
+      <div class="badges">
+        <span class="badge-no" id="sheetNo"></span>
+        <span class="badge-cat" id="sheetCat"></span>
+      </div>
+      <h2 id="sheetTitle"></h2>
+    </div>
+    <button class="close" id="closeBtn" aria-label="닫기">✕</button>
+  </div>
+  <p class="desc" id="sheetDesc"></p>
+  <dl class="meta">
+    <dt>대상</dt><dd id="sheetTarget"></dd>
+    <dt>위치</dt><dd id="sheetLocation"></dd>
+  </dl>
+</aside>
+
+<noscript><p style="text-align:center;padding:20px">이 페이지는 자바스크립트가 필요합니다.</p></noscript>
+
+<script>
+/* =====================================================================
+   1. 부스 콘텐츠 데이터 — 명칭·설명 수정은 여기서만 하면 됩니다.
+   ("확인 필요" / "설명 입력 예정"은 아직 자료로 확정되지 않은 항목)
+===================================================================== */
+const CATEGORY = {
+  boardgame: { label: "보드게임 체험" },
+  creative:  { label: "창의융합 체험" },
+};
+
+const BOOTHS = [
+  { id:"booth-1",  boothNo:1,  categoryKey:"boardgame",
+    title:"[유치부A] 우당탕탕! 동물 친구들의 스릴 만점 휴가", shortTitle:"동물 친구들의 휴가",
+    target:"유치부", description:"", location:"지혜의 광장 북측", mapId:"map-booth-1" },
+  { id:"booth-2",  boothNo:2,  categoryKey:"boardgame",
+    title:"[유치부B] 반짝반짝! 보물찾기 대작전", shortTitle:"보물찾기 대작전",
+    target:"유치부", description:"", location:"지혜의 광장 북측", mapId:"map-booth-2" },
+  { id:"booth-3",  boothNo:3,  categoryKey:"boardgame",
+    title:"[1-2학년A] 비버타워 챌린지! 자신의 한계에 도전하라!", shortTitle:"비버타워 챌린지",
+    target:"초등 1~2학년", description:"", location:"지혜의 광장 북측", mapId:"map-booth-3" },
+  { id:"booth-4",  boothNo:4,  categoryKey:"boardgame",
+    title:"[1-2학년B] 유레카! 북극곰의 한글 탐험", shortTitle:"북극곰의 한글 탐험",
+    target:"초등 1~2학년", description:"", location:"지혜의 광장 북측", mapId:"map-booth-4" },
+  { id:"booth-5",  boothNo:5,  categoryKey:"boardgame",
+    title:"[3-4학년] 순발력 쾅쾅! 두뇌 깨우기 보드게임", shortTitle:"두뇌 깨우기",
+    target:"초등 3~4학년", description:"", location:"지혜의 광장 서측", mapId:"map-booth-5" },
+  { id:"booth-6",  boothNo:6,  categoryKey:"boardgame",
+    title:"부스명 확인 중입니다", shortTitle:"부스 6",
+    target:"확인 중", description:"", location:"지혜의 광장 서측", mapId:"map-booth-6" },
+  { id:"booth-7",  boothNo:7,  categoryKey:"boardgame",
+    title:"과학아 놀자! 그래비트랙스", shortTitle:"그래비트랙스",
+    target:"확인 중", description:"", location:"지혜의 광장 서측", mapId:"map-booth-7" },
+  { id:"booth-8",  boothNo:8,  categoryKey:"creative",
+    title:"밀고 당기고! 나만의 슬라이딩 퍼즐", shortTitle:"슬라이딩 퍼즐",
+    target:"추후 안내", description:"", location:"지혜의 광장 동측 (어린이실 앞)", mapId:"map-booth-8" },
+  { id:"booth-9",  boothNo:9,  categoryKey:"creative",
+    title:"데굴데굴! 움직이는 자벌레 연구소", shortTitle:"자벌레 연구소",
+    target:"추후 안내", description:"", location:"지혜의 광장 남서측", mapId:"map-booth-9" },
+  { id:"booth-10", boothNo:10, categoryKey:"creative",
+    title:"물속 컵을 노려라!", shortTitle:"물속 컵을 노려라",
+    target:"추후 안내", description:"", location:"지혜의 광장 동측 (어린이실 앞)", mapId:"map-booth-10" },
+  { id:"booth-11", boothNo:11, categoryKey:"creative",
+    title:"두뇌 풀가동! 창의 수학 챌린지", shortTitle:"창의 수학 챌린지",
+    target:"추후 안내", description:"", location:"지혜의 광장 남측 (본부 옆)", mapId:"map-booth-11" },
+  { id:"booth-12", boothNo:12, categoryKey:"creative",
+    title:"출동! 카미봇 지게차 미션", shortTitle:"카미봇 지게차 미션",
+    target:"추후 안내", description:"", location:"지혜의 광장 동측 (어린이실 앞)", mapId:"map-booth-12" },
+  { id:"booth-13", boothNo:13, categoryKey:"creative",
+    title:"킥오프! 햄스터봇 로봇축구", shortTitle:"햄스터봇 로봇축구",
+    target:"추후 안내", description:"", location:"지혜의 광장 동측 (어린이실 앞)", mapId:"map-booth-13" },
+  { id:"booth-14", boothNo:14, categoryKey:"creative",
+    title:"[넥슨재단] 슬라이딩 수학도둑", shortTitle:"슬라이딩 수학도둑",
+    target:"추후 안내", description:"", location:"지혜의 광장 남측 (본부 옆)", mapId:"map-booth-14" },
+];
+
+/* =====================================================================
+   2. 지도 좌표 데이터 — 「전체 부스.png」의 실제 배치 비율을 따릅니다.
+   (콘텐츠와 분리되어 있어 위치 수정 시 여기서만 조정)
+   rot 이 있으면 대각선 배치(꿈뜨락 어린이실 벽면 방향)
+===================================================================== */
+const BOOTH_GEOM = {
+  "map-booth-1":  { x:218, y:58,  w:70, h:46 },
+  "map-booth-2":  { x:292, y:58,  w:70, h:46 },
+  "map-booth-3":  { x:366, y:58,  w:70, h:46 },
+  "map-booth-4":  { x:440, y:58,  w:70, h:46 },
+  "map-booth-5":  { x:244, y:112, w:46, h:68 },
+  "map-booth-6":  { x:244, y:188, w:46, h:68 },
+  "map-booth-7":  { x:244, y:264, w:46, h:68 },
+  "map-booth-8":  { x:518, y:200, w:44, h:68 },
+  "map-booth-9":  { x:168, y:292, w:74, h:42 },
+  "map-booth-12": { cx:538, cy:306, w:56, h:42, rot:55 },
+  "map-booth-13": { cx:574, cy:356, w:56, h:42, rot:55 },
+  "map-booth-10": { cx:608, cy:406, w:56, h:42, rot:55 },
+  "map-booth-14": { x:284, y:348, w:76, h:42 },
+  "map-booth-11": { x:436, y:348, w:78, h:42 },
+};
+
+/* =====================================================================
+   3. SVG 부스 렌더링
+===================================================================== */
+const SVGNS = "http://www.w3.org/2000/svg";
+const boothLayer = document.getElementById("boothLayer");
+const boothEls = new Map(); // boothNo -> <g>
+
+function el(name, attrs){
+  const n = document.createElementNS(SVGNS, name);
+  for (const k in attrs) n.setAttribute(k, attrs[k]);
+  return n;
+}
+
+for (const b of BOOTHS){
+  const g0 = BOOTH_GEOM[b.mapId];
+  if (!g0) continue;
+  const cx = g0.cx !== undefined ? g0.cx : g0.x + g0.w/2;
+  const cy = g0.cy !== undefined ? g0.cy : g0.y + g0.h/2;
+
+  const g = el("g", { id:b.mapId, class:`booth ${b.categoryKey}`, role:"button", tabindex:"0" });
+  g.setAttribute("aria-label", `부스 ${b.boothNo} · ${CATEGORY[b.categoryKey].label} · ${b.shortTitle}`);
+
+  const wrap = el("g", { class:"chip-wrap" });
+  const rectAttrs = { x:cx-g0.w/2, y:cy-g0.h/2, width:g0.w, height:g0.h, rx:9 };
+  const rot = g0.rot ? `rotate(${g0.rot} ${cx} ${cy})` : "";
+
+  const base = el("rect", { ...rectAttrs, y:rectAttrs.y+4, class:"chip-base" });
+  const main = el("rect", { ...rectAttrs, class:"chip-main", "stroke-width":2.5 });
+  if (rot){ base.setAttribute("transform", rot); main.setAttribute("transform", rot); }
+  wrap.appendChild(base); wrap.appendChild(main);
+
+  // 번호 알약 — 회전된 부스에서도 번호는 항상 똑바로
+  const vertical = !g0.rot && g0.h > g0.w;
+  const pw = g0.rot ? 34 : vertical ? 36 : 42;
+  const ph = g0.rot ? 28 : 32;
+  wrap.appendChild(el("rect", { x:cx-pw/2, y:cy-ph/2, width:pw, height:ph, rx:g0.rot?8:9, class:"pill" }));
+  const num = el("text", { x:cx, y:cy+(g0.rot?8:9), "text-anchor":"middle", class:"pill-num",
+                           "font-size": g0.rot ? 22 : vertical ? 24 : 26 });
+  num.textContent = String(b.boothNo).padStart(2,"0");
+  wrap.appendChild(num);
+  g.appendChild(wrap);
+
+  // 터치 히트 영역 (시각 요소보다 넓게)
+  const pad = 10;
+  const hw = Math.max(g0.w, g0.h*0.8) + pad*2, hh = Math.max(g0.h, 40) + pad*2;
+  g.appendChild(el("rect", { x:cx-hw/2, y:cy-hh/2, width:hw, height:hh, class:"hit" }));
+
+  boothLayer.appendChild(g);
+  boothEls.set(b.boothNo, g);
+}
+
+/* =====================================================================
+   4. 부스 목록 칩
+===================================================================== */
+const chipGrid = document.getElementById("chipGrid");
+const chipEls = new Map();
+for (const b of BOOTHS){
+  const btn = document.createElement("button");
+  btn.className = `bchip ${b.categoryKey}`;
+  btn.setAttribute("aria-label", `부스 ${b.boothNo} ${b.shortTitle} 상세 보기`);
+  btn.innerHTML = `<span class="no">${String(b.boothNo).padStart(2,"0")}</span>
+    <span class="nm">${b.shortTitle}<span class="tg">${b.target}</span></span>`;
+  btn.addEventListener("click", () => openBooth(b.boothNo, btn));
+  chipGrid.appendChild(btn);
+  chipEls.set(b.boothNo, btn);
+}
+
+/* =====================================================================
+   5. Bottom Sheet
+===================================================================== */
+const sheet = document.getElementById("sheet");
+const backdrop = document.getElementById("backdrop");
+const closeBtn = document.getElementById("closeBtn");
+let selectedNo = null;
+let lastTrigger = null;
+
+function openBooth(no, trigger){
+  const b = BOOTHS.find(x => x.boothNo === Number(no));
+  if (!b) return;
+  selectedNo = b.boothNo;
+  lastTrigger = trigger || boothEls.get(b.boothNo);
+
+  boothEls.forEach((g, n) => {
+    g.classList.toggle("selected", n === b.boothNo);
+    g.classList.toggle("faded", n !== b.boothNo && !g.classList.contains("dim"));
+  });
+  chipEls.forEach((c, n) => c.classList.toggle("selected", n === b.boothNo));
+
+  document.getElementById("sheetNo").textContent = `부스 ${String(b.boothNo).padStart(2,"0")}`;
+  document.getElementById("sheetNo").className = `badge-no ${b.categoryKey}`;
+  document.getElementById("sheetCat").textContent = CATEGORY[b.categoryKey].label;
+  document.getElementById("sheetCat").className = `badge-cat ${b.categoryKey}`;
+  document.getElementById("sheetTitle").textContent = b.title;
+  document.getElementById("sheetTarget").textContent = b.target;
+  document.getElementById("sheetTarget").classList.toggle("flag", /확인|추후/.test(b.target));
+  document.getElementById("sheetLocation").textContent = b.location;
+
+  const desc = document.getElementById("sheetDesc");
+  if (b.description && b.description.trim()){
+    desc.textContent = b.description; desc.className = "desc";
+  } else {
+    desc.textContent = "체험 세부 내용은 준비되는 대로 안내됩니다."; desc.className = "desc placeholder";
+  }
+
+  sheet.classList.add("show"); backdrop.classList.add("show");
+  sheet.setAttribute("aria-hidden","false");
+  closeBtn.focus({ preventScroll:true });
+  hideHint();
+}
+
+function closeSheet(){
+  sheet.classList.remove("show"); backdrop.classList.remove("show");
+  sheet.setAttribute("aria-hidden","true");
+  boothEls.forEach(g => g.classList.remove("selected","faded"));
+  chipEls.forEach(c => c.classList.remove("selected"));
+  if (lastTrigger && document.contains(lastTrigger)) lastTrigger.focus({ preventScroll:true });
+  selectedNo = null;
+}
+
+closeBtn.addEventListener("click", closeSheet);
+backdrop.addEventListener("click", closeSheet);
+document.addEventListener("keydown", e => { if (e.key === "Escape" && selectedNo !== null) closeSheet(); });
+
+// 시트 아래로 스와이프해서 닫기
+let sheetDrag = null;
+sheet.addEventListener("pointerdown", e => {
+  if (e.target.closest("button")) return;
+  sheetDrag = { y0:e.clientY, moved:0 };
+  sheet.classList.add("no-anim");
+  sheet.setPointerCapture(e.pointerId);
+});
+sheet.addEventListener("pointermove", e => {
+  if (!sheetDrag) return;
+  const dy = Math.max(0, e.clientY - sheetDrag.y0);
+  sheetDrag.moved = dy;
+  sheet.style.transform = `translateY(${dy}px)`;
+});
+function endSheetDrag(){
+  if (!sheetDrag) return;
+  sheet.classList.remove("no-anim");
+  sheet.style.transform = "";
+  if (sheetDrag.moved > 90) closeSheet();
+  sheetDrag = null;
+}
+sheet.addEventListener("pointerup", endSheetDrag);
+sheet.addEventListener("pointercancel", endSheetDrag);
+
+/* =====================================================================
+   6. 부스 클릭/키보드 (팬 제스처와 탭 구분)
+===================================================================== */
+let pointerMoved = false;
+boothEls.forEach((g, no) => {
+  g.addEventListener("click", () => { if (!pointerMoved) openBooth(no, g); });
+  g.addEventListener("keydown", e => {
+    if (e.key === "Enter" || e.key === " "){ e.preventDefault(); openBooth(no, g); }
+  });
+});
+
+/* =====================================================================
+   7. 카테고리 필터
+===================================================================== */
+document.querySelectorAll(".tab").forEach(tab => {
+  tab.addEventListener("click", () => {
+    document.querySelectorAll(".tab").forEach(t => t.setAttribute("aria-pressed", String(t === tab)));
+    const f = tab.dataset.filter;
+    for (const b of BOOTHS){
+      const off = f !== "all" && b.categoryKey !== f;
+      const g = boothEls.get(b.boothNo);
+      g.classList.toggle("dim", off);
+      if (off) g.setAttribute("tabindex","-1"); else g.setAttribute("tabindex","0");
+      chipEls.get(b.boothNo).classList.toggle("dim", off);
+    }
+    if (selectedNo !== null){
+      const cur = BOOTHS.find(x => x.boothNo === selectedNo);
+      if (f !== "all" && cur.categoryKey !== f) closeSheet();
+    }
+  });
+});
+
+/* =====================================================================
+   8. 지도 팬 / 핀치 줌
+   - 배율 1에서는 세로 스크롤을 막지 않고, 확대된 상태에서만 한 손가락 팬
+===================================================================== */
+const svg = document.getElementById("mapSvg");
+const layers = [document.getElementById("rooms"), document.getElementById("facilities"), boothLayer];
+const VB = { x:30, y:20, w:730, h:615 };
+const MIN_S = 1, MAX_S = 3.6;
+let view = { s:1, tx:0, ty:0 };
+
+function applyView(){
+  const t = `translate(${view.tx} ${view.ty}) scale(${view.s})`;
+  layers.forEach(l => l.setAttribute("transform", t));
+  svg.style.touchAction = view.s > 1.01 ? "none" : "pan-y";
+}
+function clampView(){
+  view.s = Math.min(MAX_S, Math.max(MIN_S, view.s));
+  // 콘텐츠가 뷰포트 밖으로 완전히 나가지 않게 제한
+  view.tx = Math.min(VB.x*(1-view.s), Math.max((VB.x+VB.w)*(1-view.s), view.tx));
+  view.ty = Math.min(VB.y*(1-view.s), Math.max((VB.y+VB.h)*(1-view.s), view.ty));
+}
+function clientToSvg(cx, cy){
+  const r = svg.getBoundingClientRect();
+  return { x:(cx - r.left) * VB.w / r.width + VB.x, y:(cy - r.top) * VB.h / r.height + VB.y };
+}
+function zoomAt(px, py, factor){
+  const ns = Math.min(MAX_S, Math.max(MIN_S, view.s * factor));
+  const k = ns / view.s;
+  // (px,py)는 화면상 고정점(뷰포트 좌표) — 그 아래 콘텐츠가 그대로 유지되게 이동
+  view.tx = px - (px - view.tx) * k;
+  view.ty = py - (py - view.ty) * k;
+  view.s = ns;
+  clampView(); applyView();
+}
+
+const pointers = new Map();
+let pinchStart = null, panStart = null;
+
+svg.addEventListener("pointerdown", e => {
+  pointers.set(e.pointerId, { x:e.clientX, y:e.clientY });
+  pointerMoved = false;
+  if (pointers.size === 1){
+    panStart = { x:e.clientX, y:e.clientY, tx:view.tx, ty:view.ty };
+  } else if (pointers.size === 2){
+    const [a,b] = [...pointers.values()];
+    pinchStart = { d:Math.hypot(a.x-b.x, a.y-b.y), s:view.s,
+                   mid:{ x:(a.x+b.x)/2, y:(a.y+b.y)/2 } };
+    panStart = null;
+  }
+});
+svg.addEventListener("pointermove", e => {
+  if (!pointers.has(e.pointerId)) return;
+  pointers.set(e.pointerId, { x:e.clientX, y:e.clientY });
+
+  if (pointers.size === 2 && pinchStart){
+    e.preventDefault();
+    const [a,b] = [...pointers.values()];
+    const d = Math.hypot(a.x-b.x, a.y-b.y);
+    const mid = clientToSvg((a.x+b.x)/2, (a.y+b.y)/2);
+    const target = Math.min(MAX_S, Math.max(MIN_S, pinchStart.s * d / pinchStart.d));
+    zoomAt(mid.x, mid.y, target / view.s);
+    pointerMoved = true;
+    hideHint();
+  } else if (pointers.size === 1 && panStart){
+    const dx = e.clientX - panStart.x, dy = e.clientY - panStart.y;
+    if (Math.hypot(dx,dy) > 7) pointerMoved = true;
+    if (view.s > 1.01 && pointerMoved){
+      const r = svg.getBoundingClientRect();
+      view.tx = panStart.tx + dx * VB.w / r.width;
+      view.ty = panStart.ty + dy * VB.h / r.height;
+      clampView(); applyView();
+      svg.classList.add("dragging");
+    }
+  }
+});
+function endPointer(e){
+  pointers.delete(e.pointerId);
+  if (pointers.size < 2) pinchStart = null;
+  if (pointers.size === 0){ panStart = null; svg.classList.remove("dragging"); }
+}
+svg.addEventListener("pointerup", endPointer);
+svg.addEventListener("pointercancel", endPointer);
+svg.addEventListener("pointerleave", e => { if (panStart && pointers.size <= 1) endPointer(e); });
+
+// 데스크톱: Ctrl+휠 / 트랙패드 핀치 (일반 휠 스크롤은 통과)
+svg.addEventListener("wheel", e => {
+  if (!e.ctrlKey) return;
+  e.preventDefault();
+  const p = clientToSvg(e.clientX, e.clientY);
+  zoomAt(p.x, p.y, e.deltaY < 0 ? 1.12 : 0.9);
+}, { passive:false });
+
+const centerPt = { x:VB.x + VB.w/2, y:VB.y + VB.h/2 };
+document.getElementById("zoomIn").addEventListener("click", () => zoomAt(centerPt.x, centerPt.y, 1.35));
+document.getElementById("zoomOut").addEventListener("click", () => zoomAt(centerPt.x, centerPt.y, 1/1.35));
+document.getElementById("zoomReset").addEventListener("click", () => { view = { s:1, tx:0, ty:0 }; applyView(); });
+applyView();
+
+/* ===== 딥링크: #booth-9 형태로 접속하면 해당 부스를 바로 열기 ===== */
+const hashMatch = location.hash.match(/^#booth-(\d{1,2})$/);
+if (hashMatch) setTimeout(() => openBooth(Number(hashMatch[1])), 350);
+
+/* ===== 첫 진입 힌트 ===== */
+const tapHint = document.getElementById("tapHint");
+let hintHidden = false;
+function hideHint(){
+  if (hintHidden) return;
+  hintHidden = true;
+  tapHint.classList.add("gone");
+  setTimeout(() => tapHint.remove(), 500);
+}
+setTimeout(hideHint, 9000);
+svg.addEventListener("pointerdown", () => setTimeout(hideHint, 350), { once:true });
+</script>
+</body>
+</html>
