@@ -130,7 +130,8 @@ h1 .accent-c{color:var(--creative-dark)}
 .booth .pill{fill:#fff;filter:drop-shadow(0 1px 1.5px rgba(0,0,0,.18))}
 .booth.partner .chip-main{fill:#F0E7D6;stroke:#CBB893;stroke-width:2}
 .booth.partner .chip-base{fill:#D8C7A6}
-.booth .map-label{font-size:15.5px;font-weight:800;fill:#7A6740}
+/* 협력사 칸 이름 — 획이 적은 글자(넥슨)가 미래엔·본부보다 얇아 보여서 광학 보정으로 900 */
+.booth .map-label{font-size:15.5px;font-weight:900;fill:#7A6740}
 .booth .hit{fill:transparent;stroke:none}
 .booth.dim{opacity:.15;pointer-events:none}
 .booth.faded{opacity:.4}
@@ -563,7 +564,8 @@ for (const b of BOOTHS){
   const partner = !!b.mapLabel;
 
   const g = el("g", { id:b.mapId, class:`booth ${b.categoryKey}${partner ? " partner" : ""}`, role:"button", tabindex:"0" });
-  g.setAttribute("aria-label", `부스 ${b.boothNo} · ${CATEGORY[b.categoryKey].label} · ${b.shortTitle}`);
+  g.setAttribute("aria-label",
+    `부스 ${b.boothNo} · ${CATEGORY[b.categoryKey].label} · ${partner ? b.mapLabel + " " : ""}${b.shortTitle}`);
 
   const wrap = el("g", { class:"chip-wrap" });
   const rectAttrs = { x:cx-g0.w/2, y:cy-g0.h/2, width:g0.w, height:g0.h, rx:9 };
@@ -610,8 +612,10 @@ for (const b of BOOTHS){
   const btn = document.createElement("button");
   btn.className = `bchip ${b.categoryKey}`;
   btn.setAttribute("aria-label", `부스 ${b.boothNo} ${b.shortTitle} 상세 보기`);
+  // 협력사 부스는 지도에 번호 대신 이름이 있으므로, 목록에서도 이름을 함께 보여 지도와 이어줍니다
+  const sub = b.target || (b.mapLabel ? `지도에서는 '${b.mapLabel}' 칸` : "");
   btn.innerHTML = `<span class="no">${String(b.boothNo).padStart(2,"0")}</span>
-    <span class="nm">${b.shortTitle}${b.target ? `<span class="tg">${b.target}</span>` : ""}</span>`;
+    <span class="nm">${b.shortTitle}${sub ? `<span class="tg">${sub}</span>` : ""}</span>`;
   btn.addEventListener("click", () => openBooth(b.boothNo, btn));
   chipGrid.appendChild(btn);
   chipEls.set(b.boothNo, btn);
