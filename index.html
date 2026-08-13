@@ -129,6 +129,7 @@ h1 .accent-c{color:var(--creative-dark)}
 .booth.creative .pill-num{fill:var(--creative-dark)}
 .booth .pill{fill:#fff;filter:drop-shadow(0 1px 1.5px rgba(0,0,0,.18))}
 .booth.partner .chip-main{fill:#F0E7D6;stroke:#CBB893;stroke-width:2}
+.booth.partner .chip-base{fill:#D8C7A6}
 /* 협력사 칸 이름 — 획이 적은 글자(넥슨)가 미래엔·본부보다 얇아 보여서 광학 보정으로 900 */
 .booth .map-label{font-size:15.5px;font-weight:900;fill:#7A6740}
 .booth .hit{fill:transparent;stroke:none}
@@ -347,8 +348,9 @@ h1 .accent-c{color:var(--creative-dark)}
             <text class="hq-label" x="169" y="377" text-anchor="middle">본부</text>
             <text x="169" y="403" text-anchor="middle" font-size="11" font-weight="700" fill="#A08A5F">★ 뽑기 교환처</text>
           </g>
-          <!-- 미래엔 (협력 부스 · 번호 미지정) -->
+          <!-- 미래엔 (협력 부스 · 번호 미지정) — 넥슨 칸과 같은 부스식 입체 -->
           <g>
+            <rect x="368" y="359" width="62" height="34" rx="9" fill="#D8C7A6"/>
             <rect x="368" y="355" width="62" height="34" rx="9" fill="#F0E7D6" stroke="#CBB893" stroke-width="2"/>
             <text class="hq-label" x="399" y="377" text-anchor="middle">미래엔</text>
           </g>
@@ -571,15 +573,10 @@ for (const b of BOOTHS){
   const rectAttrs = { x:cx-g0.w/2, y:cy-g0.h/2, width:g0.w, height:g0.h, rx:9 };
   const rot = g0.rot ? `rotate(${g0.rot} ${cx} ${cy})` : "";
 
-  // 협력사 칸은 미래엔·본부와 동일하게 평평한 한 겹 (입체 그림자 base 없음)
-  if (!partner){
-    const base = el("rect", { ...rectAttrs, y:rectAttrs.y+4, class:"chip-base" });
-    if (rot) base.setAttribute("transform", rot);
-    wrap.appendChild(base);
-  }
+  const base = el("rect", { ...rectAttrs, y:rectAttrs.y+4, class:"chip-base" });
   const main = el("rect", { ...rectAttrs, class:"chip-main", "stroke-width":2.5 });
-  if (rot) main.setAttribute("transform", rot);
-  wrap.appendChild(main);
+  if (rot){ base.setAttribute("transform", rot); main.setAttribute("transform", rot); }
+  wrap.appendChild(base); wrap.appendChild(main);
 
   if (partner){
     // 협력사 칸 — 번호 알약 대신 이름을 그대로 (본부·미래엔 표기와 동일한 톤)
