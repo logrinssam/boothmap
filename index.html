@@ -382,7 +382,7 @@ h1 .accent-c{color:var(--creative-dark)}
   </div>
   <p class="desc" id="sheetDesc"></p>
   <dl class="meta">
-    <dt>대상</dt><dd id="sheetTarget"></dd>
+    <dt id="sheetTargetLabel">대상</dt><dd id="sheetTarget"></dd>
     <dt>위치</dt><dd id="sheetLocation"></dd>
   </dl>
 </aside>
@@ -437,37 +437,37 @@ const BOOTHS = [
     location:"지혜의 광장 서측", mapId:"map-booth-7" },
   { id:"booth-8",  boothNo:8,  categoryKey:"creative",
     title:"밀고 당기고! 나만의 슬라이딩 퍼즐", shortTitle:"슬라이딩 퍼즐",
-    target:"추후 안내",
+    target:"",
     description:"슬라이딩 퍼즐을 직접 만들며 두뇌 깨우기",
     location:"지혜의 광장 동측 (어린이실 앞)", mapId:"map-booth-8" },
   { id:"booth-9",  boothNo:9,  categoryKey:"creative",
     title:"데굴데굴! 움직이는 자벌레 연구소", shortTitle:"자벌레 연구소",
-    target:"추후 안내",
+    target:"",
     description:"관성의 원리로 무게 중심을 이동하며 자벌레 만들기",
     location:"지혜의 광장 남서측", mapId:"map-booth-9" },
   { id:"booth-10", boothNo:10, categoryKey:"creative",
     title:"물속 컵을 노려라!", shortTitle:"물속 컵을 노려라",
-    target:"추후 안내",
+    target:"",
     description:"무게중심과 빛의 굴절로 알아보는 과학",
     location:"지혜의 광장 동측 (어린이실 앞)", mapId:"map-booth-10" },
   { id:"booth-11", boothNo:11, categoryKey:"creative",
     title:"두뇌 풀가동! 창의 수학 챌린지", shortTitle:"창의 수학 챌린지",
-    target:"추후 안내",
+    target:"",
     description:"창의 수학 챌린지 (소마큐브, 에그퍼즐)",
     location:"지혜의 광장 남측 (본부 옆)", mapId:"map-booth-11" },
   { id:"booth-12", boothNo:12, categoryKey:"creative",
     title:"출동! 카미봇 지게차 미션", shortTitle:"카미봇 지게차 미션",
-    target:"추후 안내",
+    target:"",
     description:"카미봇을 활용하여 가장 많은 자원을 확보하라!",
     location:"지혜의 광장 동측 (어린이실 앞)", mapId:"map-booth-12" },
   { id:"booth-13", boothNo:13, categoryKey:"creative",
     title:"킥오프! 햄스터봇 로봇축구", shortTitle:"햄스터봇 로봇축구",
-    target:"추후 안내",
+    target:"",
     description:"햄스터봇으로 겨루는 2대2 축구 경기",
     location:"지혜의 광장 동측 (어린이실 앞)", mapId:"map-booth-13" },
   { id:"booth-14", boothNo:14, categoryKey:"creative",
     title:"[넥슨재단] 슬라이딩 수학도둑", shortTitle:"슬라이딩 수학도둑",
-    target:"추후 안내", description:"", location:"지혜의 광장 남측 (본부 옆)", mapId:"map-booth-14" },
+    target:"", description:"", location:"지혜의 광장 남측 (본부 옆)", mapId:"map-booth-14" },
 ];
 
 /* =====================================================================
@@ -553,7 +553,7 @@ for (const b of BOOTHS){
   btn.className = `bchip ${b.categoryKey}`;
   btn.setAttribute("aria-label", `부스 ${b.boothNo} ${b.shortTitle} 상세 보기`);
   btn.innerHTML = `<span class="no">${String(b.boothNo).padStart(2,"0")}</span>
-    <span class="nm">${b.shortTitle}<span class="tg">${b.target}</span></span>`;
+    <span class="nm">${b.shortTitle}${b.target ? `<span class="tg">${b.target}</span>` : ""}</span>`;
   btn.addEventListener("click", () => openBooth(b.boothNo, btn));
   chipGrid.appendChild(btn);
   chipEls.set(b.boothNo, btn);
@@ -585,6 +585,10 @@ function openBooth(no, trigger){
   document.getElementById("sheetCat").textContent = CATEGORY[b.categoryKey].label;
   document.getElementById("sheetCat").className = `badge-cat ${b.categoryKey}`;
   document.getElementById("sheetTitle").textContent = b.title;
+  // 대상 구분이 없는 부스(창의융합)는 대상 줄 자체를 숨김
+  const hasTarget = !!b.target;
+  document.getElementById("sheetTargetLabel").style.display = hasTarget ? "" : "none";
+  document.getElementById("sheetTarget").style.display = hasTarget ? "" : "none";
   document.getElementById("sheetTarget").textContent = b.target;
   document.getElementById("sheetTarget").classList.toggle("flag", /확인|추후/.test(b.target));
   document.getElementById("sheetLocation").textContent = b.location;
