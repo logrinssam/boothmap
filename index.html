@@ -210,6 +210,20 @@ h1 .accent-c{color:var(--creative-dark)}
   color:#98A1AD;background:#F7F9FA;border:1.5px dashed #DDE3EA;border-radius:12px;
   padding:11px 14px;font-size:13px;
 }
+/* 예약 보드게임 / 자유체험 — 줄을 나눠서 한눈에 구분되게 */
+.plines{display:flex;flex-direction:column;gap:8px;margin:12px 0 2px}
+.pline{
+  display:flex;align-items:center;gap:9px;
+  border-radius:12px;padding:9px 11px;background:#F7F9FA;
+}
+.pline .ptag{
+  flex:none;font-size:11.5px;font-weight:800;border-radius:99px;padding:3.5px 9px;white-space:nowrap;
+}
+.pline.rsv{background:var(--board-soft)}
+.pline.rsv .ptag{background:var(--board-dark);color:#fff}
+.pline.fre{background:#FFF6EA}
+.pline.fre .ptag{background:#D68A2E;color:#fff}
+.pline .pval{font-size:13.5px;font-weight:700;color:#3C4655;line-height:1.45}
 .meta{display:grid;grid-template-columns:auto 1fr;gap:8px 14px;margin:14px 0 0;font-size:13.5px}
 .meta dt{color:var(--muted);font-weight:700;display:flex;align-items:center;gap:5px}
 .meta dd{margin:0;font-weight:650}
@@ -380,7 +394,7 @@ h1 .accent-c{color:var(--creative-dark)}
     </div>
     <button class="close" id="closeBtn" aria-label="닫기">✕</button>
   </div>
-  <p class="desc" id="sheetDesc"></p>
+  <div class="desc" id="sheetDesc"></div>
   <dl class="meta">
     <dt id="sheetTargetLabel">대상</dt><dd id="sheetTarget"></dd>
     <dt>위치</dt><dd id="sheetLocation"></dd>
@@ -403,37 +417,37 @@ const BOOTHS = [
   { id:"booth-1",  boothNo:1,  categoryKey:"boardgame",
     title:"[유치부A] 동물 친구들의 스릴 만점 휴가", shortTitle:"동물 친구들의 휴가",
     target:"유치부",
-    description:"예약 보드게임: 픽미업 등 · 자유체험: 카프라",
+    reserve:"픽미업 등", free:"카프라",
     location:"지혜의 광장 북측 (어린이실 방향)", mapId:"map-booth-1" },
   { id:"booth-2",  boothNo:2,  categoryKey:"boardgame",
     title:"[유치부B] 반짝반짝! 보물찾기 대작전", shortTitle:"보물찾기 대작전",
     target:"유치부",
-    description:"예약 보드게임: 미니 우봉고 · 자유체험: 코잉스",
+    reserve:"미니 우봉고", free:"코잉스",
     location:"지혜의 광장 북측", mapId:"map-booth-2" },
   { id:"booth-3",  boothNo:3,  categoryKey:"boardgame",
     title:"[1-2학년A, 자율체험] 비버타워 챌린지!", shortTitle:"비버타워 챌린지",
     target:"초등 1~2학년",
-    description:"예약 보드게임: 비버타워 등 · 자유체험: 고고젤라또",
+    reserve:"비버타워 등", free:"고고젤라또",
     location:"지혜의 광장 북측", mapId:"map-booth-3" },
   { id:"booth-4",  boothNo:4,  categoryKey:"boardgame",
     title:"[1-2학년B] 유레카! 북극곰의 한글 탐험", shortTitle:"북극곰의 한글 탐험",
     target:"초등 1~2학년",
-    description:"예약 보드게임: 닥터유레카 등 · 자유체험: 스틱스택",
+    reserve:"닥터유레카 등", free:"스틱스택",
     location:"지혜의 광장 북측", mapId:"map-booth-4" },
   { id:"booth-5",  boothNo:5,  categoryKey:"boardgame",
     title:"[3-4학년] 순발력 팡팡! 두뇌 깨우기 보드게임", shortTitle:"두뇌 깨우기",
     target:"초등 3~4학년",
-    description:"예약 보드게임: 블리츠 등 · 자유체험: 스택버거",
+    reserve:"블리츠 등", free:"스택버거",
     location:"지혜의 광장 서측", mapId:"map-booth-5" },
   { id:"booth-6",  boothNo:6,  categoryKey:"boardgame",
     title:"[4학년 이상, 자율체험] 1대1 대결 더 지니어스", shortTitle:"더 지니어스",
     target:"초등 4학년 이상",
-    description:"예약 보드게임: 포메이션 · 자유체험: 러시아워",
+    reserve:"포메이션", free:"러시아워",
     location:"지혜의 광장 서측", mapId:"map-booth-6" },
   { id:"booth-7",  boothNo:7,  categoryKey:"boardgame",
     title:"[학년 무관, 자율체험] 힘의 법칙: 움직임을 지배하라!", shortTitle:"움직임을 지배하라",
     target:"학년 무관",
-    description:"예약 보드게임: 그래비트랙스, 클러스터, 클라스크",
+    reserve:"그래비트랙스, 클러스터, 클라스크",
     location:"지혜의 광장 서측", mapId:"map-booth-7" },
   { id:"booth-8",  boothNo:8,  categoryKey:"creative",
     title:"밀고 당기고! 나만의 슬라이딩 퍼즐", shortTitle:"슬라이딩 퍼즐",
@@ -593,8 +607,27 @@ function openBooth(no, trigger){
   document.getElementById("sheetTarget").classList.toggle("flag", /확인|추후/.test(b.target));
   document.getElementById("sheetLocation").textContent = b.location;
 
+  // 예약 보드게임 / 자유체험은 각각 한 줄씩 (그 외에는 설명 문단)
   const desc = document.getElementById("sheetDesc");
-  if (b.description && b.description.trim()){
+  desc.textContent = "";
+  if (b.reserve || b.free){
+    desc.className = "desc";
+    const box = document.createElement("div");
+    box.className = "plines";
+    const line = (cls, label, value) => {
+      const row = document.createElement("div");
+      row.className = `pline ${cls}`;
+      const tag = document.createElement("span");
+      tag.className = "ptag"; tag.textContent = label;
+      const val = document.createElement("span");
+      val.className = "pval"; val.textContent = value;
+      row.append(tag, val);
+      box.appendChild(row);
+    };
+    if (b.reserve) line("rsv", "예약 보드게임", b.reserve);
+    if (b.free)    line("fre", "자유체험", b.free);
+    desc.appendChild(box);
+  } else if (b.description && b.description.trim()){
     desc.textContent = b.description; desc.className = "desc";
   } else {
     desc.textContent = "체험 세부 내용은 준비되는 대로 안내됩니다."; desc.className = "desc placeholder";
