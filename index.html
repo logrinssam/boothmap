@@ -307,8 +307,10 @@ h1 .accent-c{color:var(--creative-dark)}
           <g>
             <path d="M574 42 L744 42 L744 438 L664 438 L560 280 Z" fill="#FBEEDC" stroke="#E4CBA6" stroke-width="2.5"/>
             <path d="M574 42 L744 42 L744 50 L574 50 Z" fill="#E4CBA6" opacity=".55"/>
-            <text class="room-label" x="668" y="200" text-anchor="middle">꿈뜨락</text>
-            <text class="room-label" x="668" y="222" text-anchor="middle">어린이실</text>
+            <text class="room-label small" x="668" y="108" text-anchor="middle">STEM 도서관 &amp;</text>
+            <text class="room-label small" x="668" y="128" text-anchor="middle">북피크닉존</text>
+            <text class="room-label" x="668" y="248" text-anchor="middle">꿈뜨락</text>
+            <text class="room-label" x="668" y="270" text-anchor="middle">어린이실</text>
           </g>
 
           <!-- 중앙홀 · 안내데스크 -->
@@ -411,7 +413,9 @@ h1 .accent-c{color:var(--creative-dark)}
   </section>
 
   <p class="note">
+    🎲 추천 학년은 게임 난이도와 특성을 고려한 권장 기준이며, 학년과 관계없이 즐길 수 있습니다.<br/>
     🏆 보드게임 대회장 〈혜윰마당〉은 지하 1층(B1F) — 중앙홀에서 계단 또는 엘리베이터를 이용하세요.<br/>
+    대회 종목: 1~2학년 써니데이 · 3~4학년 파머스마켓 · 5~6학년 해녀<br/>
     ⭐ 스탬프를 모으면 본부(뽑기 교환처)로! 쓰레기는 지정된 곳에 버려주세요.<br/>
     부스 위치와 프로그램은 현장 사정에 따라 일부 변경될 수 있습니다.
   </p>
@@ -458,12 +462,12 @@ const BOOTHS = [
   { id:"booth-2",  boothNo:2,  categoryKey:"boardgame",
     title:"[유치부B] 반짝반짝! 보물찾기 대작전", shortTitle:"보물찾기 대작전",
     target:"유치부",
-    reserve:"미니 우봉고", free:"코잉스",
+    reserve:"미니우봉고 등", free:"코잉스",
     location:"지혜의 광장 북측", mapId:"map-booth-2" },
   { id:"booth-3",  boothNo:3,  categoryKey:"boardgame",
-    title:"[1-2학년A, 자유체험] 비버타워 챌린지!", shortTitle:"비버타워 챌린지",
+    title:"[1-2학년A, 자유체험] 한계에 도전하라! 비버타워 챌린지!", shortTitle:"비버타워 챌린지",
     target:"초등 1~2학년",
-    reserve:"비버타워 등", free:"고고젤라또",
+    free:"비버타워, 고고젤라또",
     location:"지혜의 광장 북측", mapId:"map-booth-3" },
   { id:"booth-4",  boothNo:4,  categoryKey:"boardgame",
     title:"[1-2학년B] 유레카! 북극곰의 한글 탐험", shortTitle:"북극곰의 한글 탐험",
@@ -473,7 +477,7 @@ const BOOTHS = [
   { id:"booth-5",  boothNo:5,  categoryKey:"boardgame",
     title:"[학년 무관, 자유체험] 힘의 법칙: 움직임을 지배하라!", shortTitle:"움직임을 지배하라",
     target:"학년 무관",
-    reserve:"그래비트랙스, 클러스터, 클라스크",
+    free:"그래비트랙스, 클러스터, 클라스크",
     location:"지혜의 광장 서측", mapId:"map-booth-5" },
   { id:"booth-6",  boothNo:6,  categoryKey:"boardgame",
     title:"[3-4학년] 순발력 팡팡! 두뇌 깨우기 보드게임", shortTitle:"두뇌 깨우기",
@@ -481,40 +485,40 @@ const BOOTHS = [
     reserve:"블리츠 등", free:"스택버거",
     location:"지혜의 광장 서측", mapId:"map-booth-6" },
   { id:"booth-7",  boothNo:7,  categoryKey:"boardgame",
-    title:"[4학년 이상, 자유체험] 공간지각능력 더 지니어스", shortTitle:"더 지니어스",
+    title:"[4학년 이상, 자유체험] 대결 x 챌린지 더 지니어스", shortTitle:"더 지니어스",
     target:"초등 4학년 이상",
-    reserve:"포메이션", free:"러시아워",
+    free:"포메이션, 러시아워",
     location:"지혜의 광장 서측", mapId:"map-booth-7" },
   { id:"booth-8",  boothNo:8,  categoryKey:"creative",
+    title:"데굴데굴! 움직이는 자벌레 연구소", shortTitle:"자벌레 연구소",
+    target:"",
+    description:"관성과 무게 중심을 이용한 자벌레 장난감 제작",
+    location:"지혜의 광장 남서측", mapId:"map-booth-8" },
+  { id:"booth-9",  boothNo:9,  categoryKey:"creative",
     title:"밀고 당기고! 나만의 슬라이딩 퍼즐", shortTitle:"슬라이딩 퍼즐",
     target:"",
     description:"슬라이딩 퍼즐을 직접 만들며 두뇌 깨우기",
-    location:"지혜의 광장 동측 (어린이실 앞)", mapId:"map-booth-8" },
-  { id:"booth-9",  boothNo:9,  categoryKey:"creative",
-    title:"데굴데굴! 움직이는 자벌레 연구소", shortTitle:"자벌레 연구소",
-    target:"",
-    description:"관성의 원리로 무게 중심을 이동하며 자벌레 만들기",
-    location:"지혜의 광장 남서측", mapId:"map-booth-9" },
+    location:"지혜의 광장 동측 (어린이실 앞)", mapId:"map-booth-9" },
   { id:"booth-10", boothNo:10, categoryKey:"creative",
-    title:"물속 컵을 노려라!", shortTitle:"물속 컵을 노려라",
-    target:"",
-    description:"무게중심과 빛의 굴절로 알아보는 과학",
-    location:"지혜의 광장 동측 (어린이실 앞)", mapId:"map-booth-10" },
-  { id:"booth-11", boothNo:11, categoryKey:"creative",
-    title:"두뇌 풀가동! 창의 수학 챌린지", shortTitle:"창의 수학 챌린지",
-    target:"",
-    description:"창의 수학 챌린지 (소마큐브, 에그퍼즐)",
-    location:"지혜의 광장 남측 (본부 옆)", mapId:"map-booth-11" },
-  { id:"booth-12", boothNo:12, categoryKey:"creative",
     title:"출동! 카미봇 지게차 미션", shortTitle:"카미봇 지게차 미션",
     target:"",
     description:"카미봇을 활용하여 가장 많은 자원을 확보하라!",
-    location:"지혜의 광장 동측 (어린이실 앞)", mapId:"map-booth-12" },
-  { id:"booth-13", boothNo:13, categoryKey:"creative",
+    location:"지혜의 광장 동측 (어린이실 앞)", mapId:"map-booth-10" },
+  { id:"booth-11", boothNo:11, categoryKey:"creative",
     title:"킥오프! 햄스터봇 로봇축구", shortTitle:"햄스터봇 로봇축구",
     target:"",
     description:"햄스터봇으로 겨루는 2대2 축구 경기",
-    location:"지혜의 광장 동측 (어린이실 앞)", mapId:"map-booth-13" },
+    location:"지혜의 광장 동측 (어린이실 앞)", mapId:"map-booth-11" },
+  { id:"booth-12", boothNo:12, categoryKey:"creative",
+    title:"물 속 컵을 노려라!", shortTitle:"물 속 컵을 노려라",
+    target:"",
+    description:"무게중심과 빛의 굴절로 알아보는 과학",
+    location:"지혜의 광장 동측 (어린이실 앞)", mapId:"map-booth-12" },
+  { id:"booth-13", boothNo:13, categoryKey:"creative",
+    title:"두뇌 풀가동! 창의 수학 챌린지", shortTitle:"창의 수학 챌린지",
+    target:"",
+    description:"창의 수학 챌린지 (소마큐브, 에그퍼즐)",
+    location:"지혜의 광장 남측 (본부 옆)", mapId:"map-booth-13" },
   { id:"booth-14", boothNo:14, categoryKey:"creative",
     title:"[넥슨] 슬라이딩 수학도둑", shortTitle:"슬라이딩 수학도둑",
     target:"", description:"", location:"지혜의 광장 남측 (본부 옆)",
@@ -523,7 +527,8 @@ const BOOTHS = [
 
 /* =====================================================================
    2. 지도 좌표 데이터 — 최종 확정 배치도의 실제 배치 비율을 따릅니다.
-   (윗줄은 왼쪽→오른쪽으로 4·3·2·1, 왼쪽 세로줄은 위→아래로 5·6·7)
+   (윗줄 왼→오 4·3·2·1 / 왼쪽 세로줄 위→아래 5·6·7 / 좌하단 가로칸 8 /
+    우측 세로칸 9 / 대각선 위→아래 10·11·12 / 하단 중앙 13)
    rot 이 있으면 대각선 배치(꿈뜨락 어린이실 벽면 방향)
 ===================================================================== */
 const BOOTH_GEOM = {
@@ -534,13 +539,13 @@ const BOOTH_GEOM = {
   "map-booth-5":  { x:244, y:112, w:46, h:68 },
   "map-booth-6":  { x:244, y:188, w:46, h:68 },
   "map-booth-7":  { x:244, y:264, w:46, h:68 },
-  "map-booth-8":  { x:518, y:200, w:44, h:68 },
-  "map-booth-9":  { x:168, y:292, w:74, h:42 },
-  "map-booth-12": { cx:538, cy:306, w:56, h:42, rot:55 },
-  "map-booth-13": { cx:574, cy:356, w:56, h:42, rot:55 },
-  "map-booth-10": { cx:608, cy:406, w:56, h:42, rot:55 },
+  "map-booth-9":  { x:518, y:200, w:44, h:68 },
+  "map-booth-8":  { x:168, y:292, w:74, h:42 },
+  "map-booth-10": { cx:538, cy:306, w:56, h:42, rot:55 },
+  "map-booth-11": { cx:574, cy:356, w:56, h:42, rot:55 },
+  "map-booth-12": { cx:608, cy:406, w:56, h:42, rot:55 },
   "map-booth-14": { x:298, y:355, w:62, h:34 },  // 협력사 칸 — 미래엔과 같은 62×34, 간격 8 유지
-  "map-booth-11": { x:436, y:348, w:78, h:42 },
+  "map-booth-13": { x:436, y:348, w:78, h:42 },
 };
 
 /* =====================================================================
