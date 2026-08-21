@@ -131,7 +131,7 @@ h1 .accent-c{color:var(--creative-dark)}
 .booth.partner .chip-main{fill:#F0E7D6;stroke:#CBB893;stroke-width:2}
 .booth.partner .chip-base{fill:#D8C7A6}
 /* 협력사 칸 이름 — 획이 적은 글자(넥슨)가 미래엔·본부보다 얇아 보여서 광학 보정으로 900 */
-.booth .map-label{font-size:15.5px;font-weight:900;fill:#7A6740}
+.map-label{font-size:15.5px;font-weight:900;fill:#7A6740}
 .booth .hit{fill:transparent;stroke:none}
 .booth.dim{opacity:.15;pointer-events:none}
 .booth.faded{opacity:.4}
@@ -281,7 +281,7 @@ h1 .accent-c{color:var(--creative-dark)}
   <div class="tabs rise d1" role="group" aria-label="부스 카테고리 필터">
     <button class="tab" data-filter="all" aria-pressed="true">전체</button>
     <button class="tab" data-filter="boardgame" aria-pressed="false">보드게임 체험 <span class="cnt">7</span></button>
-    <button class="tab" data-filter="creative" aria-pressed="false">창의융합 체험 <span class="cnt">7</span></button>
+    <button class="tab" data-filter="creative" aria-pressed="false">창의융합 체험 <span class="cnt">6</span></button>
   </div>
 
   <section class="map-card rise d2" aria-label="1층 부스 배치 지도">
@@ -290,7 +290,7 @@ h1 .accent-c{color:var(--creative-dark)}
       <div class="map-help">두 손가락으로 확대할 수 있어요</div>
     </div>
     <div class="map-frame" id="mapFrame">
-      <svg id="mapSvg" viewBox="30 20 730 615" role="img" aria-label="부산도서관 1층 축제 배치 지도. 지혜의 광장을 중심으로 부스 1번부터 14번이 배치되어 있습니다.">
+      <svg id="mapSvg" viewBox="30 20 730 615" role="img" aria-label="부산도서관 1층 축제 배치 지도. 지혜의 광장을 중심으로 부스 1번부터 13번이 배치되어 있습니다.">
         <!-- ======== floor / rooms (static) ======== -->
         <g id="rooms">
           <!-- 지혜의 광장 (open plaza floor) -->
@@ -349,6 +349,12 @@ h1 .accent-c{color:var(--creative-dark)}
             <rect x="124" y="355" width="90" height="34" rx="9" fill="#F0E7D6" stroke="#CBB893" stroke-width="2"/>
             <text class="hq-label" x="169" y="377" text-anchor="middle">본부</text>
             <text x="169" y="403" text-anchor="middle" font-size="11" font-weight="700" fill="#A08A5F">★ 뽑기 교환처</text>
+          </g>
+          <!-- 넥슨 (협력 부스 · 번호 미지정, 클릭 없음) — 미래엔과 같은 부스식 입체 -->
+          <g>
+            <rect x="298" y="359" width="62" height="34" rx="9" fill="#D8C7A6"/>
+            <rect x="298" y="355" width="62" height="34" rx="9" fill="#F0E7D6" stroke="#CBB893" stroke-width="2"/>
+            <text class="map-label" x="329" y="377" text-anchor="middle">넥슨</text>
           </g>
           <!-- 미래엔 (협력 부스 · 번호 미지정) — 넥슨 칸과 같은 부스식 입체 -->
           <g>
@@ -519,10 +525,6 @@ const BOOTHS = [
     target:"",
     description:"창의 수학 챌린지 (소마큐브, 에그퍼즐)",
     location:"지혜의 광장 남측 (본부 옆)", mapId:"map-booth-13" },
-  { id:"booth-14", boothNo:14, categoryKey:"creative",
-    title:"[넥슨] 슬라이딩 수학도둑", shortTitle:"슬라이딩 수학도둑",
-    target:"", description:"", location:"지혜의 광장 남측 (본부 옆)",
-    mapLabel:"넥슨", mapId:"map-booth-14" },
 ];
 
 /* =====================================================================
@@ -544,7 +546,6 @@ const BOOTH_GEOM = {
   "map-booth-10": { cx:538, cy:306, w:56, h:42, rot:55 },
   "map-booth-11": { cx:574, cy:356, w:56, h:42, rot:55 },
   "map-booth-12": { cx:608, cy:406, w:56, h:42, rot:55 },
-  "map-booth-14": { x:298, y:355, w:62, h:34 },  // 협력사 칸 — 미래엔과 같은 62×34, 간격 8 유지
   "map-booth-13": { x:436, y:348, w:78, h:42 },
 };
 
