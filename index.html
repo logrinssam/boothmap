@@ -198,6 +198,26 @@ h1 .accent-c{color:var(--creative-dark)}
 .bchip.selected{box-shadow:0 0 0 2.5px var(--creative-dark)}
 .bchip.selected.boardgame{box-shadow:0 0 0 2.5px var(--board-dark)}
 
+/* ---------- 방탈출 스탬프 안내 ---------- */
+/* 캐릭터 이미지 배경이 흰색이라 흰 카드 위에 얹어 경계가 보이지 않게 함 */
+.stamp-tip{
+  display:flex;align-items:center;justify-content:center;gap:12px;margin-top:16px;
+  background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:8px 16px;
+  text-decoration:none;transition:transform .12s ease,border-color .18s ease;
+  -webkit-tap-highlight-color:transparent;
+}
+.stamp-tip:active{transform:scale(.99);border-color:#CCE0F4}
+.stamp-tip:focus-visible{outline:3px solid rgba(31,96,150,.45);outline-offset:2px}
+.stamp-tip img{flex:none;width:104px;height:auto;display:block}
+.stamp-tip p{font-size:13.5px;font-weight:750;line-height:1.4;color:var(--text);word-break:keep-all;text-wrap:balance}
+.stamp-tip .sub{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-top:1px}
+/* CTA의 › 와 같은 모양. 흰 카드 위라 원 배경만 CTA 소프트 블루로 뒤집음 */
+.stamp-tip .arw{
+  flex:none;display:inline-flex;align-items:center;justify-content:center;
+  width:20px;height:20px;border-radius:50%;background:#E9F2FB;
+  color:#1F6096;font-size:13px;font-weight:800;line-height:1;padding-bottom:2px;
+}
+
 /* ---------- footer note ---------- */
 .note{margin-top:22px;font-size:12px;color:#8B94A1;line-height:1.6;text-align:center}
 
@@ -418,10 +438,15 @@ h1 .accent-c{color:var(--creative-dark)}
     <div class="chip-grid" id="chipGrid"></div>
   </section>
 
+  <a class="stamp-tip rise d3" href="https://logrinssam.github.io/library-treasure-hunt/" target="_blank" rel="noopener noreferrer">
+    <img src="mascot.png" alt="" width="321" height="192"/>
+    <p>부산도서관 방탈출 참여하고 도장 받기 <span class="sub">(뽑기 추가 1회까지!)</span></p>
+    <span class="arw" aria-hidden="true">›</span>
+  </a>
+
   <p class="note">
     🎲 추천 학년은 게임 난이도와 특성을 고려한 권장 기준이며, 학년과 관계없이 즐길 수 있습니다.<br/>
     🏆 보드게임 대회장 〈혜윰마당〉은 지하 1층(B1F) — 중앙홀에서 계단 또는 엘리베이터를 이용하세요.<br/>
-    대회 종목: 1~2학년 써니데이 · 3~4학년 파머스마켓 · 5~6학년 해녀<br/>
     ⭐ 스탬프를 모으면 본부(뽑기 교환처)로! 쓰레기는 지정된 곳에 버려주세요.<br/>
     부스 위치와 프로그램은 현장 사정에 따라 일부 변경될 수 있습니다.
   </p>
