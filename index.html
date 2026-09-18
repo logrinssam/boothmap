@@ -88,6 +88,11 @@ h1 .accent-c{color:var(--creative-dark)}
 .zbtn:active{transform:scale(.94)}
 .zbtn:focus-visible{outline:3px solid rgba(97,86,216,.45)}
 .zbtn svg{display:block}
+/* 폰에서는 세로 버튼열이 우하단 방탈출 칸·어린이실 모서리를 덮으므로, 비어 있는 좌하단에 작게 가로로 눕힘 */
+@media(max-width:620px){
+  .zoom-ui{right:auto;left:8px;flex-direction:row;gap:5px}
+  .zbtn{width:30px;height:30px;border-radius:9px;font-size:16px}
+}
 
 /* first-touch hint */
 .hint{
@@ -130,6 +135,10 @@ h1 .accent-c{color:var(--creative-dark)}
 .booth .pill{fill:#fff;filter:drop-shadow(0 1px 1.5px rgba(0,0,0,.18))}
 .booth.partner .chip-main{fill:#F0E7D6;stroke:#CBB893;stroke-width:2}
 .booth.partner .chip-base{fill:#D8C7A6}
+/* 방탈출 시작·도장 수령처 — 부스는 아니지만 눌러서 안내 시트를 여는 칸 (본부·협력 칸과 같은 베이지 톤) */
+.booth.escape .chip-main{fill:#F0E7D6;stroke:#CBB893;stroke-width:2}
+.booth.escape .chip-base{fill:#D8C7A6}
+.spot-label{font-size:12.5px;font-weight:900;fill:#7A6740}
 /* 협력사 칸 이름 — 획이 적은 글자(넥슨)가 미래엔·본부보다 얇아 보여서 광학 보정으로 900 */
 .map-label{font-size:15.5px;font-weight:900;fill:#7A6740}
 .booth .hit{fill:transparent;stroke:none}
@@ -253,6 +262,8 @@ h1 .accent-c{color:var(--creative-dark)}
 .badge-cat{font-size:12px;font-weight:800;border-radius:99px;padding:4.5px 11px}
 .badge-cat.boardgame{background:var(--board-soft);color:var(--board-dark)}
 .badge-cat.creative{background:var(--creative-soft);color:var(--creative-dark)}
+.badge-no.escape{background:#8A744A}
+.badge-cat.escape{background:#F0E7D6;color:#7A6740}
 .sheet h2{font-size:19px;line-height:1.35;margin:0 0 4px;letter-spacing:-.02em}
 .close{
   flex:none;width:34px;height:34px;border-radius:50%;border:none;background:#EFF2F5;color:#5A6678;
@@ -283,6 +294,21 @@ h1 .accent-c{color:var(--creative-dark)}
 .meta dt{color:var(--muted);font-weight:700;display:flex;align-items:center;gap:5px}
 .meta dd{margin:0;font-weight:650}
 .meta .flag{color:#B8823A;font-weight:700}
+/* 시트 하단 바로가기 (방탈출 참여하기) — › 는 CTA와 같은 모양 */
+.sheet-go{
+  display:flex;align-items:center;justify-content:center;gap:8px;margin-top:18px;
+  padding:13px 16px;border-radius:14px;background:#8A744A;color:#fff;
+  font-size:15px;font-weight:800;text-decoration:none;-webkit-tap-highlight-color:transparent;
+  transition:transform .12s ease;
+}
+.sheet-go[hidden]{display:none}
+.sheet-go:active{transform:scale(.985)}
+.sheet-go:focus-visible{outline:3px solid rgba(138,116,74,.45);outline-offset:2px}
+.sheet-go .arw{
+  flex:none;display:inline-flex;align-items:center;justify-content:center;
+  width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,.25);
+  font-size:13px;font-weight:800;line-height:1;padding-bottom:2px;
+}
 
 /* ---------- load-in animation ---------- */
 @media (prefers-reduced-motion: no-preference){
@@ -348,9 +374,10 @@ h1 .accent-c{color:var(--creative-dark)}
 
           <!-- 전통놀이 자유체험 공간 -->
           <g>
-            <rect x="542" y="468" width="148" height="74" rx="13" fill="#FFF9EF" stroke="#E8A54C" stroke-width="2" stroke-dasharray="7 5"/>
-            <text class="room-label small" x="616" y="500" text-anchor="middle" fill="#C88B35">전통놀이</text>
-            <text class="room-label small" x="616" y="519" text-anchor="middle" fill="#C88B35">자유체험 공간</text>
+            <!-- 위쪽(어린이실 앞)에 방탈출 칸이 들어가서 상단을 6 내림 -->
+            <rect x="542" y="474" width="148" height="68" rx="13" fill="#FFF9EF" stroke="#E8A54C" stroke-width="2" stroke-dasharray="7 5"/>
+            <text class="room-label small" x="616" y="503" text-anchor="middle" fill="#C88B35">전통놀이</text>
+            <text class="room-label small" x="616" y="522" text-anchor="middle" fill="#C88B35">자유체험 공간</text>
           </g>
 
           <!-- 지혜의 광장 label -->
@@ -475,6 +502,9 @@ h1 .accent-c{color:var(--creative-dark)}
     <dt id="sheetTargetLabel">추천 학년</dt><dd id="sheetTarget"></dd>
     <dt>위치</dt><dd id="sheetLocation"></dd>
   </dl>
+  <a class="sheet-go" id="sheetGo" target="_blank" rel="noopener noreferrer" hidden>
+    <span id="sheetGoText"></span><span class="arw" aria-hidden="true">›</span>
+  </a>
 </aside>
 
 <noscript><p style="text-align:center;padding:20px">이 페이지는 자바스크립트가 필요합니다.</p></noscript>
@@ -642,6 +672,41 @@ for (const b of BOOTHS){
 }
 
 /* =====================================================================
+   3-1. 방탈출 시작 & 도장 수령처 (꿈뜨락 어린이실 앞)
+   - 부스 번호는 없지만 부스처럼 눌러서 안내 시트를 엽니다. 문구·링크는 여기서만 수정
+   - 칸 너비는 글자 길이를 실측해서 오른쪽 끝(right)에 맞춰 잡음
+===================================================================== */
+const ESCAPE_SPOT = {
+  mapLabel:"🔑 방탈출·도장", right:752, y:442, h:23,
+  badge:"방탈출", cat:"시작 · 도장 수령",
+  title:"방탈출 시작 & 도장 수령처",
+  description:"부산도서관 방탈출은 여기에서 출발해요. 방탈출을 마친 뒤 이곳으로 돌아오면 도장을 받을 수 있어요. (뽑기 추가 1회까지!)",
+  location:"꿈뜨락 어린이실 앞",
+  linkText:"방탈출 참여하기",
+  link:"https://logrinssam.github.io/library-treasure-hunt/",
+};
+const escapeEl = (() => {
+  const s = ESCAPE_SPOT, PAD = 9;
+  const g = el("g", { id:"map-spot-escape", class:"booth escape", role:"button", tabindex:"0",
+                      "aria-label":`${s.title} · ${s.location}` });
+  const wrap = el("g", { class:"chip-wrap" });
+  const base = el("rect", { y:s.y+3.5, height:s.h, rx:9, class:"chip-base" });
+  const main = el("rect", { y:s.y, height:s.h, rx:9, class:"chip-main" });
+  const lb = el("text", { y:s.y+s.h/2+4.5, "text-anchor":"middle", class:"spot-label" });
+  lb.textContent = s.mapLabel;
+  wrap.append(base, main, lb);
+  const hit = el("rect", { y:s.y-8, height:s.h+18, class:"hit" });
+  g.append(wrap, hit);
+  boothLayer.appendChild(g);
+  const w = lb.getComputedTextLength() + PAD*2, x = s.right - w;
+  base.setAttribute("x", x); base.setAttribute("width", w);
+  main.setAttribute("x", x); main.setAttribute("width", w);
+  lb.setAttribute("x", x + w/2);
+  hit.setAttribute("x", x-8); hit.setAttribute("width", w+16);
+  return g;
+})();
+
+/* =====================================================================
    4. 부스 목록 칩
 ===================================================================== */
 const chipGrid = document.getElementById("chipGrid");
@@ -692,6 +757,8 @@ function openBooth(no, trigger){
   document.getElementById("sheetTarget").textContent = b.target;
   document.getElementById("sheetTarget").classList.toggle("flag", /확인|추후/.test(b.target));
   document.getElementById("sheetLocation").textContent = b.location;
+  document.getElementById("sheetGo").hidden = true;
+  escapeEl.classList.add("faded");
 
   // 예약 보드게임 / 자유체험은 각각 한 줄씩 (그 외에는 설명 문단)
   const desc = document.getElementById("sheetDesc");
@@ -725,10 +792,45 @@ function openBooth(no, trigger){
   hideHint();
 }
 
+// 방탈출 칸 — 부스 시트를 그대로 쓰되 대상 줄은 숨기고 하단에 참여하기 링크를 붙임
+function openEscapeSpot(trigger){
+  const s = ESCAPE_SPOT;
+  selectedNo = "escape";
+  lastTrigger = trigger || escapeEl;
+
+  boothEls.forEach(g => {
+    g.classList.remove("selected");
+    g.classList.toggle("faded", !g.classList.contains("dim"));
+  });
+  chipEls.forEach(c => c.classList.remove("selected"));
+  escapeEl.classList.remove("faded");
+  escapeEl.classList.add("selected");
+
+  document.getElementById("sheetNo").textContent = s.badge;
+  document.getElementById("sheetNo").className = "badge-no escape";
+  document.getElementById("sheetCat").textContent = s.cat;
+  document.getElementById("sheetCat").className = "badge-cat escape";
+  document.getElementById("sheetTitle").textContent = s.title;
+  document.getElementById("sheetTargetLabel").style.display = "none";
+  document.getElementById("sheetTarget").style.display = "none";
+  document.getElementById("sheetLocation").textContent = s.location;
+  const desc = document.getElementById("sheetDesc");
+  desc.textContent = s.description; desc.className = "desc";
+  const go = document.getElementById("sheetGo");
+  go.href = s.link; go.hidden = false;
+  document.getElementById("sheetGoText").textContent = s.linkText;
+
+  sheet.classList.add("show"); backdrop.classList.add("show");
+  sheet.setAttribute("aria-hidden","false");
+  closeBtn.focus({ preventScroll:true });
+  hideHint();
+}
+
 function closeSheet(){
   sheet.classList.remove("show"); backdrop.classList.remove("show");
   sheet.setAttribute("aria-hidden","true");
   boothEls.forEach(g => g.classList.remove("selected","faded"));
+  escapeEl.classList.remove("selected","faded");
   chipEls.forEach(c => c.classList.remove("selected"));
   if (lastTrigger && document.contains(lastTrigger)) lastTrigger.focus({ preventScroll:true });
   selectedNo = null;
@@ -741,7 +843,7 @@ document.addEventListener("keydown", e => { if (e.key === "Escape" && selectedNo
 // 시트 아래로 스와이프해서 닫기
 let sheetDrag = null;
 sheet.addEventListener("pointerdown", e => {
-  if (e.target.closest("button")) return;
+  if (e.target.closest("button,a")) return;
   sheetDrag = { y0:e.clientY, moved:0 };
   sheet.classList.add("no-anim");
   sheet.setPointerCapture(e.pointerId);
@@ -771,6 +873,11 @@ boothEls.forEach((g, no) => {
   g.addEventListener("keydown", e => {
     if (e.key === "Enter" || e.key === " "){ e.preventDefault(); openBooth(no, g); }
   });
+});
+
+escapeEl.addEventListener("click", () => { if (!pointerMoved) openEscapeSpot(escapeEl); });
+escapeEl.addEventListener("keydown", e => {
+  if (e.key === "Enter" || e.key === " "){ e.preventDefault(); openEscapeSpot(escapeEl); }
 });
 
 /* =====================================================================
@@ -895,6 +1002,7 @@ applyView();
 /* ===== 딥링크: #booth-9 형태로 접속하면 해당 부스를 바로 열기 ===== */
 const hashMatch = location.hash.match(/^#booth-(\d{1,2})$/);
 if (hashMatch) setTimeout(() => openBooth(Number(hashMatch[1])), 350);
+else if (location.hash === "#escape") setTimeout(() => openEscapeSpot(), 350);
 
 /* ===== 첫 진입 힌트 ===== */
 const tapHint = document.getElementById("tapHint");
